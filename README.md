@@ -65,7 +65,7 @@ The LogisticRegression class includes:
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome!
 ## 📜 License
-[MIT License]
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/nguyensinhloc/WineClassification/blob/ac47e24e61e5a0ccb0f9c266ef005976fa6cf4e7/LICENSE) file for details.
 ## 🙏 Acknowledgments
 - Scikit-learn for the Wine Dataset
 - Open-source machine learning community
