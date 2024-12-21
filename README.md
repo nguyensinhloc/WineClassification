@@ -69,3 +69,5 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 ## 🙏 Acknowledgments
 - Scikit-learn for the Wine Dataset
 - Open-source machine learning community
+## Note
+This project is for educational purposes and demonstrates a custom machine learning algorithm implementation.
