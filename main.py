@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import load_wine
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
@@ -11,6 +12,7 @@ class LogisticRegression:
         self.num_iterations = num_iterations
         self.weights = None
         self.bias = None
+        self.cost_history = []  # Thêm danh sách lưu trữ cost
 
     def sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
@@ -34,6 +36,7 @@ class LogisticRegression:
 
             # Compute cost
             cost = self.compute_cost(A, Y)
+            self.cost_history.append(cost)  # Lưu giá trị cost
 
             # Compute gradients
             dw = 1 / m * np.dot(X.T, (A - Y))
@@ -43,9 +46,10 @@ class LogisticRegression:
             self.weights -= self.learning_rate * dw
             self.bias -= self.learning_rate * db
 
-            # Print cost every 100 iterations
+            # In thông tin chi tiết
             if i % 100 == 0:
-                print(f"Cost after iteration {i}: {cost}")
+                print(f"Lần lặp {i}: Loss = {cost}")
+                print(f"Trọng số hiện tại: {self.weights.flatten()[:5]}...")
 
     def predict(self, X):
         Z = np.dot(X, self.weights) + self.bias
@@ -58,14 +62,39 @@ class LogisticRegression:
         self.gradient_descent(X, Y)
 
 
+def plot_loss_curve(cost_history):
+    plt.figure(figsize=(10, 5))
+    plt.plot(cost_history)
+    plt.title('Loss Function qua các Iteration')
+    plt.xlabel('Iteration')
+    plt.ylabel('Cost')
+    plt.show()
+
+
+def plot_classification_result(y_true, y_pred):
+    plt.figure(figsize=(8, 6))
+    cm = confusion_matrix(y_true, y_pred)
+    plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Ma Trận Nhầm Lẫn')
+    plt.colorbar()
+    plt.xlabel('Nhãn Dự Đoán')
+    plt.ylabel('Nhãn Thực Tế')
+    plt.show()
+
+
 def main():
     # Load Wine dataset
     wine = load_wine()
     X = wine.data
     y = wine.target
 
+    # In thông tin dữ liệu ban đầu
+    print("Dữ liệu ban đầu:")
+    print(f"- Số lượng mẫu: {X.shape[0]}")
+    print(f"- Số chiều đặc trưng: {X.shape[1]}")
+    print(f"- Phân phối nhãn lớp: {np.bincount(y)}")
+
     # Chuyển đổi thành bài toán binary classification
-    # Ví dụ: phân loại giữa class 0 và các class khác
     y_binary = (y == 0).astype(int)
 
     # Chia dữ liệu train/test
@@ -90,12 +119,16 @@ def main():
     y_pred = lr.predict(X_test)
 
     # Đánh giá mô hình
-    print("\nModel Evaluation:")
-    print("Accuracy:", accuracy_score(y_test, y_pred))
-    print("\nConfusion Matrix:")
+    print("\nKết quả đánh giá mô hình:")
+    print(f"- Độ chính xác: {accuracy_score(y_test, y_pred)}")
+    print("\n- Ma trận nhầm lẫn:")
     print(confusion_matrix(y_test, y_pred))
-    print("\nClassification Report:")
+    print("\n- Báo cáo phân loại:")
     print(classification_report(y_test, y_pred))
+
+    # Vẽ biểu đồ
+    plot_loss_curve(lr.cost_history)
+    plot_classification_result(y_test, y_pred)
 
 
 if __name__ == "__main__":
