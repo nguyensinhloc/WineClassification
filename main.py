@@ -48,7 +48,7 @@ class LogisticRegression:
 
             # In thông tin chi tiết
             if i % 100 == 0:
-                print(f"Lần lặp {i}: Loss = {cost}")
+                print(f"Lần lặp {i + 100}: Loss = {cost}")
                 print(f"Trọng số hiện tại: {self.weights.flatten()[:5]}...")
 
     def predict(self, X):
